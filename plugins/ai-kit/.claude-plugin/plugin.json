@@ -1,0 +1,16 @@
+{
+  "name": "ai-kit",
+  "version": "3.0.0",
+  "description": "Planejar (com esforço automático) → executar com subagentes → verificar com evidência; consulta a outros modelos (Codex, Gemini, Copilot); diagnóstico de desempenho.",
+  "author": {
+    "name": "FredericoAfra"
+  },
+  "repository": "https://github.com/FredericoAfra/AI.Projects.Template",
+  "keywords": [
+    "orquestracao",
+    "prd",
+    "ralph",
+    "agentes",
+    "skills"
+  ]
+}

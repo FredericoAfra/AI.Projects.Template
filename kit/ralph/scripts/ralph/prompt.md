@@ -6,7 +6,7 @@ Você é um agente autônomo executando **uma única tarefa** do plano. Não há
 2. Confira a branch do plano (`branch`); crie/troque se necessário.
 3. Implemente a tarefa {{TAREFA}} — só ela, a menor mudança que atende a todos os `criterios`.
 4. Rode os comandos de `verificacao` da tarefa e corrija até passarem.
-5. Verifique com evidência: se o agente `verificador` estiver disponível, delegue a ele; senão, confira cada critério você mesmo (comando + resultado).
+5. Verifique com evidência: se o agente `verificador` estiver disponível, delegue a ele com `model: haiku` e `effort: low`; senão, confira cada critério você mesmo (comando + resultado). Se a causa de uma falha não for óbvia e o agente `depurador` estiver disponível, use-o.
 6. Atualize `plano/plano.json` na tarefa {{TAREFA}}:
    - todos os critérios comprovados → `"status": "verificado"`;
    - não conseguiu → mantenha `"pendente"`, some 1 em `"tentativas"` e explique em `"notas"`; se `tentativas` chegar a 2, use `"status": "falhou"`.

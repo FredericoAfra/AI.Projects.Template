@@ -10,7 +10,10 @@ description: "Verifica se o trabalho feito realmente funciona: confere critério
 - Sem plano: a mudança atual (`git diff` + arquivos novos) e o objetivo que o usuário descreveu.
 
 ## 2. Verificação principal
-Delegue ao agente `verificador` com: o que deveria acontecer (critérios), arquivos alterados e comandos de verificação conhecidos (testes, build, scripts). Para várias tarefas independentes, um verificador por tarefa, em paralelo.
+Delegue ao agente `verificador` com: o que deveria acontecer (critérios), arquivos alterados e comandos de verificação conhecidos (testes, build, scripts).
+- **Revisão de entrega** (padrão desta skill): `verificador` no modelo dele (**opus**), sobre o conjunto das mudanças.
+- **Checagem rápida** de uma tarefa pequena: `verificador` com `model: haiku`, `effort: low`.
+- Problema encontrado e causa não óbvia → ofereça o `depurador`.
 
 ## 3. Segunda opinião (quando valer o custo)
 Use `/ai-kit:consultar-modelos` com outro modelo se: a mudança for G ou de risco alto, o verificador marcou itens como NÃO VERIFICADO, ou o usuário pedir. Peça ao outro modelo uma **revisão independente** (não mostre a conclusão do verificador, para não enviesar).

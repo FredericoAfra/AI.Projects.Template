@@ -1,11 +1,13 @@
 # AI.Projects.Template — ai-kit
 
-Kit mínimo para projetos com IA: **planejar → executar → verificar**, com o esforço escolhido automaticamente, consulta a outros modelos e diagnóstico para melhorar o próprio kit.
+Kit mínimo para programar com IA (webapps, painéis, bots, sistemas pequenos) **rápido e sem erros**: entender o pedido → planejar → executar → verificar, com **um modelo por papel** — Opus para pensar, Sonnet para o trabalho médio, Haiku para o simples.
 
 ```
 plugins/ai-kit/                ← plugin do Claude Code (vale para todos os projetos)
-  skills/  planejar · executar · verificar · consultar-modelos · diagnostico · criar
-  agents/  executor · verificador · analista-dados · mentor-rigoroso
+  skills/  fazer · planejar · executar · verificar · consultar-modelos · diagnostico · criar
+  agents/  arquiteto · depurador · verificador · mentor-rigoroso   (opus)
+           executor · analista-dados                               (sonnet)
+           executor-leve                                           (haiku)
 kit/                           ← arquivos copiados para cada projeto pelo aikit
   core/          AGENTS.md, CLAUDE.md, .claude/settings.json
   ralph/         scripts/ralph/ (execução autônoma do plano)
@@ -14,15 +16,32 @@ aikit.py (.ps1/.sh)            ← install · update · status · validate
 docs/decisoes.md               ← o que foi escolhido, por quê, e as alternativas
 ```
 
+## Agentes e modelos (do mais complexo ao mais simples)
+
+| Agente | Modelo / esforço | Papel |
+|---|---|---|
+| `arquiteto` | opus / high | Transforma o pedido em especificação (objetivo, exemplos, premissas, critérios) para você confirmar; monta o plano |
+| `depurador` | opus / high | Bugs difíceis: reproduz, isola a causa raiz, corrige com teste de regressão |
+| `verificador` | opus / high (final) · haiku / low (por tarefa) | Confere com evidência; não edita |
+| `mentor-rigoroso` | opus / high | Crítica dura de planos e decisões |
+| `executor` | sonnet / medium (opus em tarefa G) | Tarefas médias |
+| `analista-dados` | sonnet / medium | Esquema, SQL, DAX, validação de números |
+| `executor-leve` | haiku / low | Mudanças simples e bem especificadas |
+
+Sessão principal: `opusplan` (configurado no `.claude/settings.json` do projeto) — Opus no modo plan, Sonnet no resto. Como o trabalho pesado já roda nos agentes Opus, a sessão pode ficar no Sonnet.
+
 ## O fluxo
 
 ```
-/ai-kit:planejar ──► plano/plano.json  (tarefas + critérios + tamanho P/M/G → modelo e esforço)
-       │
-/ai-kit:executar ──► executor (haiku | sonnet | opus, conforme a tarefa; em paralelo quando possível)
-       │               └─► verificador confere com evidência; falhou → tenta de novo um nível acima
-       │
-/ai-kit:verificar ─► verificador + segunda opinião de outro modelo (Codex/ChatGPT, Gemini, Copilot)
+/ai-kit:fazer <pedido> ─► triagem
+   ├─ trivial ─────────► executor-leve (haiku) ─► verificador rápido (haiku)
+   ├─ bug ─────────────► depurador (opus) ─► verificador rápido
+   └─ funcionalidade ──► arquiteto (opus): especificação ─► VOCÊ CONFIRMA
+                         ─► /ai-kit:planejar  → plano/plano.json (tarefa → agente + modelo)
+                         ─► /ai-kit:executar  → P: executor-leve · M: executor · G: executor/opus
+                                                 cada tarefa: verificador rápido; falhou → sobe um nível
+                                                 (haiku → sonnet → opus → depurador)
+                         ─► /ai-kit:verificar → verificador opus no conjunto + 2ª opinião opcional
 
 /ai-kit:diagnostico ► custo, tokens, erros, skills nunca usadas → o que melhorar
 /ai-kit:criar ──────► nova regra, skill ou agente

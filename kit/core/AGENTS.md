@@ -24,7 +24,9 @@
 
 ## Como trabalhar
 - Planejamento e estado: `plano/PLANO.md`, `plano/plano.json` (tarefas, esforço, status) e `plano/progresso.md`. Ao retomar, leia-os primeiro.
-- Fluxo (Claude Code + plugin ai-kit): `/ai-kit:planejar` → `/ai-kit:executar` → `/ai-kit:verificar`.
+- Entrada (Claude Code + plugin ai-kit): `/ai-kit:fazer <pedido>` — triagem e roteamento. Etapas avulsas: `/ai-kit:planejar` → `/ai-kit:executar` → `/ai-kit:verificar`.
+- **Entender antes de fazer:** pedido não trivial vira especificação (objetivo, exemplos, premissas, critérios) confirmada pelo usuário antes de qualquer código.
+- Modelo por papel: entender/planejar, bugs difíceis e revisão final em **opus** (`arquiteto`, `depurador`, `verificador`); tarefas médias em **sonnet** (`executor`); tarefas simples e checagens rápidas em **haiku** (`executor-leve`, `verificador` rápido).
 - Uma tarefa só está pronta quando seus critérios foram **verificados com evidência**.
 
 ## Consultar outro modelo

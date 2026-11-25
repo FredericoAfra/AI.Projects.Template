@@ -5,6 +5,8 @@ Uma ferramenta por função. As alternativas ficam registradas para reavaliar qu
 | Função | Escolhido | Por quê | Alternativas (quando considerar) |
 |---|---|---|---|
 | Planejar | skill `planejar` | Leve, sem dependências, e escolhe modelo/esforço por tarefa | [GitHub Spec Kit](https://github.github.com/spec-kit/) (projeto grande, várias pessoas); [BMAD-METHOD](https://github.com/bmad-code-org/BMAD-METHOD) (simular um time ágil completo); [Task Master](https://github.com/eyaltoledano/claude-task-master) |
+| Entender o pedido | agente `arquiteto` (opus) + confirmação obrigatória na skill `fazer` | A maioria dos erros vem da interpretação; uma chamada de Opus antes evita refazer tudo | Modo plan do Claude Code sozinho (sem especificação estruturada) |
+| Modelo por papel | agentes com `model`/`effort` fixos; sessão em `opusplan` | Opus só onde precisa pensar (entender, depurar, revisão final); haiku no simples | Sessão Sonnet + advisor Opus (experimental); Opus em tudo (caro e lento) |
 | Executar | skill `executar` + agente `executor`; `ralph.sh` para modo autônomo | Mesmo `plano.json` nos dois modos; modelo barato onde dá | Agent teams do Claude Code; [Claude Squad](https://github.com/smtg-ai/claude-squad) (muitas sessões paralelas) |
 | Verificar | agente `verificador` + skill `verificar` | Evidência obrigatória; independente de quem implementou | Plugin oficial `/code-review` (revisão de PR em paralelo) |
 | Outros modelos | skill `consultar-modelos` via CLIs (Codex, Gemini, Copilot) | Usa assinaturas existentes, sem chave de API, somente leitura | [PAL MCP server](https://github.com/beehiveinnovations/zen-mcp-server) (50+ modelos via API/OpenRouter); protocolo A2A (agentes como produto) |

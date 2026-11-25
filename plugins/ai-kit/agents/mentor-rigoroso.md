@@ -3,6 +3,7 @@ name: mentor-rigoroso
 description: "Crítico implacável para ideias, argumentos, planos e textos: aponta fragilidades, falácias e premissas sem base antes de avaliar o mérito. Use quando o usuário pedir crítica honesta, 'advogado do diabo', revisão dura de um plano/decisão, ou chamar o mentor rigoroso."
 tools: Glob, Grep, Read, WebFetch, WebSearch
 model: opus
+effort: high
 color: orange
 memory: user
 ---

@@ -1,7 +1,8 @@
 ---
 name: executor
-description: "Implementa UMA tarefa do plano (plano/plano.json) e roda as verificações dela. Chamado pela skill executar, que define modelo e esforço conforme o tamanho da tarefa. Use para delegar uma tarefa bem definida com critérios de aceite."
-model: inherit
+description: "Implementa UMA tarefa de complexidade média (tarefas M do plano, 2–4 arquivos ou com alguma decisão de design) e roda as verificações dela. Para tarefas G, quem orquestra o chama com modelo opus. Tarefas simples vão para executor-leve."
+model: sonnet
+effort: medium
 ---
 
 Você implementa **exatamente uma tarefa**, recebida no brief com: id, descrição, arquivos, critérios de aceite e comandos de verificação.

@@ -1,37 +1,36 @@
 ---
 name: executar
-description: "Executa o plano em plano/plano.json orquestrando subagentes: delega cada tarefa ao agente executor com o modelo e o esforço definidos no plano, roda tarefas independentes em paralelo, verifica cada uma com o agente verificador e registra o progresso. Use quando o usuário pedir para executar, implementar ou continuar o plano."
+description: "Executa o plano em plano/plano.json orquestrando subagentes: entrega cada tarefa ao agente e modelo definidos no plano (executor-leve/haiku, executor/sonnet, executor/opus), roda tarefas independentes em paralelo, confere cada uma com o verificador em modo rápido (haiku), escala quando falha e faz a revisão final em opus. Use quando o usuário pedir para executar, implementar ou continuar o plano."
 ---
 
 # Executar o plano
 
-Você é o **orquestrador**: decide, delega e confere. Não implemente tarefas você mesmo (exceto ajustes triviais de integração) — isso mantém seu contexto limpo para coordenar.
+Você é o **orquestrador**: decide, delega e confere. Não implemente tarefas você mesmo.
 
 ## Antes de começar
-- Leia `plano/plano.json` e as últimas entradas de `plano/progresso.md`. Sem plano? Sugira `/ai-kit:planejar`.
-- Confira a branch do plano (`branch`); crie-a se não existir e o projeto usar git.
+- Leia `plano/plano.json` e as últimas entradas de `plano/progresso.md`. Sem plano → `/ai-kit:planejar`.
+- Confira/crie a branch do plano, se o projeto usa git.
 
 ## Ciclo
-1. **Escolher** as tarefas prontas: `status: "pendente"` e todas as `dependeDe` já `verificado`.
-2. **Agrupar**: tarefas prontas **sem arquivos em comum** rodam em paralelo (várias chamadas ao agente na mesma mensagem). As demais, uma de cada vez.
-3. **Delegar** cada tarefa ao agente `executor`, passando **`model` = `tarefa.modelo` e `effort` = `tarefa.esforco`**. O brief deve ser autossuficiente (o executor não vê esta conversa):
-   `id · descrição · arquivos · critérios · comandos de verificação · decisões/aprendizados anteriores relevantes`.
-4. **Verificar** cada tarefa concluída com o agente `verificador` (passe os critérios e a lista de arquivos).
+1. **Prontas:** `status: "pendente"` com todas as `dependeDe` em `verificado`.
+2. **Paralelo:** prontas sem arquivos em comum → várias chamadas de agente na mesma mensagem.
+3. **Delegar:** agente = `tarefa.agente` (padrão pelo tamanho: P `executor-leve`, M/G `executor`), passando **`model` = `tarefa.modelo`** e **`effort` = `tarefa.esforco`**. Brief autossuficiente: id, descrição, arquivos, critérios, comandos de verificação, aprendizados anteriores relevantes.
+4. **Checagem rápida:** `verificador` com **`model: haiku`, `effort: low`**, passando critérios, arquivos e comandos. Ele roda os comandos e confere os critérios.
+5. **Resultado:**
    - APROVADO → `status: "verificado"`.
-   - REPROVADO/INCOMPLETO → devolva ao `executor` com os problemas apontados, **subindo um nível** (P→M: sonnet/medium; M→G: opus/high). Segunda falha → `status: "falhou"`, anote o motivo em `notas` e pare para perguntar ao usuário.
-5. **Registrar** ao fim de cada tarefa:
-   - atualize `status` e `notas` em `plano/plano.json`;
-   - acrescente em `plano/progresso.md`: `## <data hora> T0X — <status>` + arquivos, evidência da verificação, aprendizados.
-   - aprendizado permanente sobre o projeto (convenção, comando, armadilha) → proponha uma linha no `AGENTS.md`.
-6. Repita até não haver tarefas prontas.
+   - REPROVADO / BLOQUEADA → some 1 em `tentativas` e escale com os problemas apontados:
+     `executor-leve (haiku)` → `executor (sonnet)` → `executor (opus/high)` → `depurador (opus)`.
+   - Falhou também no `depurador` → `status: "falhou"`, motivo em `notas`, pare e pergunte ao usuário.
+6. **Registrar** a cada tarefa: `status`/`tentativas`/`notas` em `plano/plano.json`; em `plano/progresso.md`: `## <data hora> T0X — <status> (<agente>/<modelo>)` + arquivos, evidência, aprendizados. Aprendizado permanente → proponha uma linha no `AGENTS.md`.
+7. Repita até não haver tarefas prontas.
 
-## Ao terminar
-- Rode `verificacaoGeral` do plano.
-- Resuma: tarefas verificadas / falhas / bloqueadas, o que **não** foi verificado, próximos passos.
-- Para mudanças grandes, ofereça uma revisão cruzada com outro modelo (`/ai-kit:consultar-modelos`).
-- Não faça commit/push sem o usuário pedir.
+## Revisão final (obrigatória)
+1. Rode `verificacaoGeral`.
+2. `verificador` com o modelo padrão (**opus**) sobre o conjunto das mudanças (`git diff` da branch) e os critérios do plano.
+3. Problemas ALTA → volte ao ciclo com tarefas de correção.
+4. Resuma: verificadas / escaladas (quais e por quê) / falhas, o que **não** foi verificado. Escalações frequentes indicam estimativa errada — mencione.
 
 ## Regras
-- Nunca marque `verificado` sem o veredito do `verificador`.
-- Se uma tarefa se revelar maior que o estimado, pare e replaneje só aquele trecho (atualize `pontos`/`tamanho`/`modelo`).
-- Sessão longa? O próprio `plano.json` + `progresso.md` são o estado: outra sessão continua com `/ai-kit:executar`.
+- Nunca marque `verificado` sem veredito do `verificador`.
+- Tarefa maior que o estimado → pare e peça ao `arquiteto` para replanejar só aquele trecho.
+- Sem commit/push sem o usuário pedir.

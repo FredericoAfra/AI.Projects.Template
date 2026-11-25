@@ -5,14 +5,14 @@
   },
   "metadata": {
     "description": "Kit pessoal de skills, agentes e fluxos para projetos com IA.",
-    "version": "3.0.0"
+    "version": "3.1.0"
   },
   "plugins": [
     {
       "name": "ai-kit",
       "source": "./plugins/ai-kit",
-      "description": "Skills: planejar, executar, verificar, consultar-modelos, diagnostico, criar. Agentes: executor, verificador, analista-dados, mentor-rigoroso.",
-      "version": "3.0.0",
+      "description": "Skills: fazer, planejar, executar, verificar, consultar-modelos, diagnostico, criar. Agentes com modelo por papel: arquiteto, depurador, verificador, mentor-rigoroso (opus); executor, analista-dados (sonnet); executor-leve (haiku).",
+      "version": "3.1.0",
       "category": "productivity",
       "tags": [
         "planejamento",

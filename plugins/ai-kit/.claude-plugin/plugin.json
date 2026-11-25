@@ -1,7 +1,7 @@
 {
   "name": "ai-kit",
-  "version": "3.0.0",
-  "description": "Planejar (com esforço automático) → executar com subagentes → verificar com evidência; consulta a outros modelos (Codex, Gemini, Copilot); diagnóstico de desempenho.",
+  "version": "3.1.0",
+  "description": "Entender o pedido → planejar → executar → verificar, com um modelo por papel (opus para pensar, sonnet para o médio, haiku para o simples); consulta a outros modelos; diagnóstico de desempenho.",
   "author": {
     "name": "FredericoAfra"
   },

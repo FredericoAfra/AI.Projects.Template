@@ -1,5 +1,14 @@
 # Changelog
 
+## 3.1.0 — 2026-11-25 (modelo por papel)
+- Cada agente tem modelo e esforço fixos: `arquiteto`, `depurador`, `verificador`, `mentor-rigoroso` em opus/high; `executor`, `analista-dados` em sonnet/medium; `executor-leve` em haiku/low.
+- Novos agentes: `arquiteto` (pedido → especificação confirmada → plano), `depurador` (causa raiz + teste de regressão), `executor-leve`.
+- Nova skill `fazer`: porta de entrada com triagem (trivial / bug / funcionalidade) e roteamento por modelo; exige confirmação da especificação antes de programar.
+- `planejar` delega ao `arquiteto`; tarefas ganham `agente` + `modelo`.
+- `executar`: checagem rápida por tarefa com verificador em haiku; escalonamento haiku → sonnet → opus → depurador; revisão final em opus.
+- Projetos instalados usam `"model": "opusplan"` na sessão principal.
+- Ralph sobe um nível de modelo a cada tentativa falha.
+
 ## 3.0.0 — 2026-11-25 (enxugamento)
 - Fluxo único **planejar → executar → verificar** com `plano/plano.json` como estado.
   - `planejar` classifica o esforço de cada tarefa (P/M/G) e define modelo e nível de esforço.

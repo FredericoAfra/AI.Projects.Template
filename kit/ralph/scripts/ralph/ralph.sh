@@ -1,6 +1,6 @@
 #!/bin/bash
 # Ralph - loop autonomo: executa plano/plano.json, uma tarefa por iteracao, com Claude Code.
-# Cada iteracao usa o modelo e o esforco definidos na tarefa (sobe um nivel na 2a tentativa).
+# Cada iteracao usa o modelo e o esforco da tarefa (haiku/sonnet/opus); sobe um nivel a cada tentativa falha.
 # Uso: bash scripts/ralph/ralph.sh [max_iteracoes]
 # ATENCAO: roda com --dangerously-skip-permissions. Use no devcontainer ou numa branch descartavel.
 set -e
@@ -27,7 +27,7 @@ subir = {"haiku": ("sonnet", "medium"), "sonnet": ("opus", "high"), "opus": ("op
 for x in t:
     if x.get("status") == "pendente" and set(x.get("dependeDe", [])) <= ok:
         m, e = x.get("modelo", "sonnet"), x.get("esforco", "medium")
-        if x.get("tentativas", 0) >= 1:
+        for _ in range(x.get("tentativas", 0)):
             m, e = subir.get(m, (m, e))
         print(x["id"], m, e); sys.exit()
 print("BLOQUEADO - -")
